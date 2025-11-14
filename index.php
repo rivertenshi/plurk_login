@@ -1,24 +1,24 @@
-<?php
+<!-- <?php
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbase = "plurk_acc";
+      $servername = "localhost";
+      $username = "root";
+      $password = "";
+      $dbase = "plurk_acc";
 
-$conn = new mysqli($servername, $username, $password, $dbase);
+      $conn = new mysqli($servername, $username, $password, $dbase);
 
-// Check if form submit is triggered
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Check if form submit is triggered
+      if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-  // Get POST values
-  $nickname = $_POST['nick_name'];
-  $password = $_POST['password'];
+        // Get POST values
+        $nickname = $_POST['nick_name'];
+        $password = $_POST['password'];
 
-  $sql = "INSERT INTO tbl_accs (username, password) VALUES ('$nickname', '$password')";
+        $sql = "INSERT INTO tbl_accs (username, password) VALUES ('$nickname', '$password')";
 
-  $conn->query($sql);
-}
-?>
+        $conn->query($sql);
+      }
+      ?> -->
 
 <html lang="en">
 
