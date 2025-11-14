@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      # Credentials from your Render screenshot
+      - DB_HOST=dpg-d4b18n6r433s739f9prg-a.singapore-postgres.render.com
+      - DB_NAME=plurkdb2_tatf
+      - DB_USER=plurkdb2
+      - DB_PASS=Dw3NSO7gSkOvT3qqGsejgnuVTj0cvqve
+      - DB_PORT=5432
