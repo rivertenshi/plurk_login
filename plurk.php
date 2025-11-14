@@ -884,10 +884,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   <link rel="dns-prefetch" href="//s.plurk.com" />
   <link rel="dns-prefetch" href="//cdnjs.cloudflare.com" />
   <link rel="preconnect" href="https://s.plurk.com" />
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-  <link rel="icon" size="32x32" type="image/png" href="/favicon.png" />
-  <link rel="icon" size="192x192" type="image/png" href="/favicon-192x192.png" />
-  <link rel="icon" size="512x512" type="image/png" href="/favicon-512x512.png" />
+  <link rel="icon" type="image/png" href="https://play-lh.googleusercontent.com/U_5xg82-GrbN5OvoHtm87O1Vk-Z2SKk8liWBnxcy9EppQNZ3BlsHhTXekqwEMXNaz7Y=w240-h480-rw" />
   <link rel="apple-touch-icon" size="180x180" type="image/png" href="/apple-touch-icon.png" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="application-name" content="Plurk" />
